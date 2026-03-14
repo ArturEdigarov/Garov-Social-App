@@ -1,0 +1,13 @@
+<svg width="720" height="240" viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="transparent"/>
+  <style>
+    .logo {
+      font-family: "Poppins", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 120px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      fill: rgb(135,126,255);
+    }
+  </style>
+  <text x="50%" y="58%" text-anchor="middle" class="logo">Garov</text>
+</svg>
