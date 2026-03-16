@@ -5,7 +5,7 @@ import {
     useInfiniteQuery,
 } from "@tanstack/react-query"
 import { createUserAccount, signInAccount, SignOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost, getInfinitePosts, searchPosts, searchUsers, getInfiniteUsers, searchSavedPosts, getInfiniteSavedPosts, updateProfile, getUserById, getInfiniteLikedPosts } from "../appwrite/api";
-import type { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
+import type { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 
 

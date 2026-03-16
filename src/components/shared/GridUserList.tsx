@@ -16,7 +16,7 @@ type GridUserListProps = {
     showUser?: boolean;
     showStats?: boolean;
 }
-const GridUserList = ({ users, showUser = true, showStats = true }: GridUserListProps) => {
+const GridUserList = ({ users, showUser = true }: GridUserListProps) => {
     const { user } = useUserContext();
     console.log("вот юзер", user)
     console.log('🔍 GridPostList получил users:', users);
@@ -25,7 +25,7 @@ const GridUserList = ({ users, showUser = true, showStats = true }: GridUserList
 
   return (
     <ul className='grid-container'>
-         {users.map((users) => (
+         {users.map((users : any) => (
             <li key={users.$id} className='relative min-w-80 max-h-80 border border-dark-4 rounded-3xl'>
                 <Link to={`/profile/${users.$id}`}>  
                     <div className=''>
