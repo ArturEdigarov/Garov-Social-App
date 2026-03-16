@@ -1,10 +1,8 @@
 import { Loader } from '@/components/shared/Loader';
 import { Input } from '@/components/ui/input'
 import useDebounce from '@/hooks/useDebounde';
-import { useGetPosts, useGetUsers, useSearchPosts, useSearchUsers } from '@/lib/react-query/queriesAndMutations';
-import GridPostList from '@/components/shared/GridPostList';
-import SearchResults from '@/components/shared/SearchResults';
-import React, { useState, useEffect } from 'react'
+import {  useGetUsers, useSearchUsers } from '@/lib/react-query/queriesAndMutations';
+import { useState, useEffect } from 'react'
 import { useInView } from 'react-intersection-observer';
 import SearchUsersResults from '@/components/shared/SearchUsersResults';
 import GridUserList from '@/components/shared/GridUserList';
@@ -36,7 +34,7 @@ const allUsers = () => {
     )
   }
 
-  const shouldShowUsers = !shouldShowSearchResults && users?.pages.every((item) => item.documents.length === 0);
+  const shouldShowUsers = !shouldShowSearchResults && users?.pages.every((item) => item?.documents.length === 0);
   return (
     <div className='explore-container'>
       <div className='explore-inner_container'>
@@ -61,7 +59,7 @@ const allUsers = () => {
         ): shouldShowUsers ? (
           <p className='text-light-4 mt-10 text-center w-full'>End of posts</p>
         ) : users.pages.map((item, index) => (
-          <GridUserList key={`page-${index}`} users={item.documents} />
+          <GridUserList key={`page-${index}`} users={item?.documents} />
         ))}
       </div> 
       {hasNextPage && !searchValue && (

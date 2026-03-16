@@ -1,6 +1,5 @@
 import { useGetPostById } from '@/lib/react-query/queriesAndMutations';
 import { Link, useParams } from 'react-router-dom';
-import React from 'react'
 import { Loader } from '@/components/shared/Loader';
 import { multiFormatDateString } from '@/lib/utils';
 import { useUserContext } from '@/context/AuthContext';

@@ -1,10 +1,10 @@
 import { Loader } from '@/components/shared/Loader';
 import { Input } from '@/components/ui/input'
 import useDebounce from '@/hooks/useDebounde';
-import { useGetCurrentUser, useGetPosts, useGetSavedPosts, useGetUsers, useSearchPosts, useSearchSavedPosts, useSearchUsers } from '@/lib/react-query/queriesAndMutations';
+import { useGetSavedPosts, useSearchSavedPosts } from '@/lib/react-query/queriesAndMutations';
 import GridPostList from '@/components/shared/GridPostList';
-import SearchResults from '@/components/shared/SearchResults';
-import React, { useState, useEffect } from 'react'
+
+import { useState, useEffect } from 'react'
 import { useInView } from 'react-intersection-observer';
 import SearchSavedPostsResults from '@/components/shared/SearchSavedPostsResults';
 import { useUserContext } from '@/context/AuthContext';
@@ -12,7 +12,6 @@ const saved = () => {
 
   const { ref, inView } = useInView();
   const { user } = useUserContext();
-  const { data: currentUser } = useGetCurrentUser();
 
   const { data: savedPosts, fetchNextPage, hasNextPage } = useGetSavedPosts(user.id);
 
@@ -75,7 +74,7 @@ const saved = () => {
         ) : (
           savedPosts.pages.map((item, index) => {
             // ТРАНСФОРМАЦИЯ происходит ПРЯМО ЗДЕСЬ для каждой страницы
-            const posts = item.documents.map((saveDocument: any) => ({
+            const posts = item?.documents.map((saveDocument: any) => ({
               ...saveDocument.post,
               creator: saveDocument.post.creator,
             }));

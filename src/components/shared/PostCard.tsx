@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+
 import type { Models } from "appwrite";
 import { Link } from 'react-router-dom';
 // Импортируй свой конфиг апврайта или функцию получения дока
-import { databases } from '@/lib/appwrite/config'; 
-import { appwriteConfig } from '@/lib/appwrite/config';
-import { formatDateString, multiFormatDateString } from '@/lib/utils';
+
+import {  multiFormatDateString } from '@/lib/utils';
 import { useUserContext } from '@/context/AuthContext';
 import PostStats from './PostStats';
 
@@ -20,8 +19,7 @@ type PostCardProps = {
 
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useUserContext();
-  const [userData, setUserData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
+
     
   // Определяем, пришел нам объект или просто строка-ID
 /**  const creatorId = typeof post.creator === 'string' ? post.creator : post.creator?.$id;
