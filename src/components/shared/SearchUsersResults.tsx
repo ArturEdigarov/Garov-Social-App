@@ -1,6 +1,5 @@
 import type { Models } from 'appwrite';
 import { Loader } from './Loader';
-import GridPostList from './GridPostList';
 import GridUserList from './GridUserList';
 
 type SearchUsersResultsProps = {
