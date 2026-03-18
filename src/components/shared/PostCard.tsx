@@ -1,15 +1,13 @@
 
 import type { Models } from "appwrite";
 import { Link } from 'react-router-dom';
-// Импортируй свой конфиг апврайта или функцию получения дока
-
 import {  multiFormatDateString } from '@/lib/utils';
 import { useUserContext } from '@/context/AuthContext';
 import PostStats from './PostStats';
 
 type PostCardProps = {
   post: Models.Document & {
-    creator: any; // Может прийти как строка (ID) или как объект
+    creator: any;
     caption: string;
     location: string;
     imageUrl: string;
@@ -18,41 +16,9 @@ type PostCardProps = {
 };
 
 const PostCard = ({ post }: PostCardProps) => {
+
   const { user } = useUserContext();
 
-    
-  // Определяем, пришел нам объект или просто строка-ID
-/**  const creatorId = typeof post.creator === 'string' ? post.creator : post.creator?.$id;
-  console.log("Creator:", post.creator);
-  const isCreatorObject = typeof post.creator === 'object' && post.creator !== null;
-    
-  useEffect(() => {
-    // Если creator пришел строкой и у нас еще нет данных в стейте
-    if (typeof post.creator === 'string' && !userData) {
-      const fetchCreator = async () => {
-        try {
-          setIsLoading(true);
-          // ТУТ ВАЖНО: укажи ID своей базы и ID коллекции Users (или где лежат юзеры)
-          const userDoc = await databases.getDocument(
-            appwriteConfig.databaseId, 
-            appwriteConfig.userTableId, 
-            post.creator
-          );
-          setUserData(userDoc);
-          
-        } catch (error) {
-          console.error("Ошибка при получении юзера:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchCreator();
-    }
-  }, [post.creator, userData]);
-
-  // Выбираем, какие данные использовать: из пропсов (если объект) или из стейта (если докачали)
-  const creator = isCreatorObject ? post.creator : userData; **/
   return (
     <div className='post-card'>
       <div className='flex-between'>

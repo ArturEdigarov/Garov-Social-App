@@ -1,8 +1,8 @@
-import { useUserContext } from '@/context/AuthContext';
 
 import { Link } from 'react-router-dom';
-
 import { Button } from '../ui/button';
+
+
 type GridUserListProps = {
     users: any & {
         username: any;
@@ -16,14 +16,10 @@ type GridUserListProps = {
     showUser?: boolean;
     showStats?: boolean;
 }
-const GridUserList = ({ users, showUser = true }: GridUserListProps) => {
-    const { user } = useUserContext();
-    console.log("вот юзер", user)
-    console.log('🔍 GridPostList получил users:', users);
-    console.log('📊 users массив?', Array.isArray(users));
-    console.log('📊 users.length:', users?.length);
 
-  return (
+
+const GridUserList = ({ users, showUser = true }: GridUserListProps) => {
+ return (
     <ul className='grid-container'>
          {users.map((users : any) => (
             <li key={users.$id} className='relative min-w-80 max-h-80 border border-dark-4 rounded-3xl'>

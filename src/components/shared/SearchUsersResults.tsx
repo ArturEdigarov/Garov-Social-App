@@ -8,22 +8,15 @@ type SearchUsersResultsProps = {
 
 }
 const SearchUsersResults = ({ isSearchFetching, searchedUsers }: SearchUsersResultsProps) => {
-    console.log("🔍 SearchResults получил:", { isSearchFetching, searchedUsers });
-    console.log("🔍 searchedUsers.documents:", searchedUsers?.documents);
-    console.log("🔍 documents length:", searchedUsers?.documents?.length);
-    
     if(isSearchFetching) {
-        console.log("⏳ Идет поиск...");
         return <Loader/>
     }
     if(searchedUsers && searchedUsers.documents.length > 0) {
-        console.log("✅ Найдено users:", searchedUsers.documents.length);
         return (
             <GridUserList users={searchedUsers.documents}/>
             
         )
     }
-    console.log("❌ Результатов не найдено");
   return (
     <p className='text-light-4 mt-10 text-center w-full'>No results found</p>
   )

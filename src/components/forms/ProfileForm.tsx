@@ -61,6 +61,9 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
         }
         return navigate(`/profile/${user.$id}`); 
     }
+    const handleCancel = () => {
+      navigate(-1); 
+    };
   return (
     <>
       <Toaster />
@@ -123,7 +126,7 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
           />
           <div className="flex gap-4 items-center justify-end">
 
-            <Button type="button" className="shad-button_dark_4">
+            <Button type="button" className="shad-button_dark_4" onClick={handleCancel}>
               Cancel
             </Button>
 

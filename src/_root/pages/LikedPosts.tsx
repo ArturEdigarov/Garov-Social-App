@@ -3,14 +3,19 @@ import { useGetLikedPosts} from '@/lib/react-query/queriesAndMutations';
 import GridPostList from '@/components/shared/GridPostList';
 import { useInView } from 'react-intersection-observer';
 import { useUserContext } from '@/context/AuthContext';
+import { useEffect } from 'react';
 const LikedPosts = () => {
 
-  const { ref } = useInView();
+  const { ref, inView } = useInView();
   const { user } = useUserContext();
 
-  const { data: likedPosts, hasNextPage } = useGetLikedPosts(user.id);
-  
+  const { data: likedPosts, fetchNextPage, hasNextPage } = useGetLikedPosts(user.id);
+useEffect(() => {
+  if(inView && hasNextPage ) fetchNextPage();
+}, [inView, hasNextPage])
+
   if (!likedPosts) return <Loader />;
+
   return (
     <div className='explore-container'>
       {<div className='flex flex-wrap gap-9 w-full max-w-5xl'>

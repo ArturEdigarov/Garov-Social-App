@@ -139,16 +139,12 @@ export const useDeletePost = () => {
 export const useGetPosts = () => {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.GET_POSTS],
-        // Явно забираем pageParam из объекта, который дает useInfiniteQuery
         queryFn: ({ pageParam }) => getInfinitePosts({ pageParam: pageParam as string | null }),
-        // В v5 начальный параметр ОБЯЗАТЕЛЕН
         initialPageParam: null as string | null, 
         getNextPageParam: (lastPage: any) => {
-            // Если данных нет, возвращаем null, чтобы остановить загрузку
             if (!lastPage || lastPage.documents.length === 0) {
                 return null;
             }
-            // Берем ID последнего документа для курсора
             return lastPage.documents[lastPage.documents.length - 1].$id;
         }   
     })
@@ -163,18 +159,13 @@ export const useSearchPosts = (searchTerm: string) => {
     })
 }
 export const useSearchUsers = (searchTerm: string) => {
-    console.log("🔍 useSearchUsers hook: called with searchTerm =", searchTerm);
-    console.log("🔍 useSearchUsers hook: enabled =", !!searchTerm);
     return useQuery({
         queryKey: [QUERY_KEYS.SEARCH_USERS, searchTerm],
         queryFn: async () => {
-            console.log("🔍 useSearchUsers hook: queryFn EXECUTING for searchTerm =", searchTerm);
             try {
                 const result = await searchUsers(searchTerm);
-                console.log("🔍 useSearchUsers hook: queryFn got result =", result);
                 return result;
             } catch(e) {
-                console.error("❌ useSearchUsers hook: queryFn error =", e);
                 throw e;
             }
         },
@@ -200,18 +191,13 @@ export const useGetUsers = () => {
 }
 
 export const useSearchSavedPosts = (searchTerm: string, userId: string) => {
-    console.log("🔍 useSearchSavedPosts hook: called with searchTerm =", searchTerm);
-    console.log("🔍 useSearchSavedPosts hook: enabled =", !!searchTerm);
     return useQuery({
         queryKey: [QUERY_KEYS.SEARCH_USERS, searchTerm],
         queryFn: async () => {
-            console.log("🔍 useSearchSavedPosts hook: queryFn EXECUTING for searchTerm =", searchTerm);
             try {
                 const result = await searchSavedPosts(searchTerm, userId);
-                console.log("🔍 useSearchSavedPosts hook: queryFn got result =", result);
                 return result;
             } catch(e) {
-                console.error("❌ useSearchSavedPosts hook: queryFn error =", e);
                 throw e;
             }
         },

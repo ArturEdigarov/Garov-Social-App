@@ -18,11 +18,6 @@ const allUsers = () => {
   const debouncedValue = useDebounce(searchValue, 500);
   const { data: searchedUsers, isFetching: isSearchFetching } = useSearchUsers(debouncedValue);
   
-  console.log("🔍 AllUsers: searchValue =", searchValue);
-  console.log("🔍 AllUsers: debouncedValue =", debouncedValue);
-  console.log("🔍 AllUsers: searchedUsers =", searchedUsers);
-  console.log("🔍 AllUsers: isSearchFetching =", isSearchFetching);
-  
   useEffect(() => {
     if(inView && !searchValue) fetchNextPage();
   }, [inView, searchValue])

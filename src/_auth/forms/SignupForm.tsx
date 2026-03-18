@@ -62,8 +62,8 @@ const SignupForm = () => {
 
   return (
     <Form {...form}>
-      <div className="sm:w-420px flex-center items-center flex-col">
-        <img src='/assets/images/logo.svg' alt="logo" className="m-auto"/>
+      <div className="sm:w-105 flex-center items-center flex-col">
+        {/* <img src='/assets/images/logo.png' alt="logo" className="m-auto max-w-40 pt-3"/>     */}
         <h2 className="h3-bold text-center md:h2-bold pt-5 sm:pt-12">Create a new account</h2>
         <p className="text-light-3 text-center small-medium md:base-regular">To use Garov enter your account details</p>
       

@@ -19,14 +19,6 @@ const saved = () => {
   const shouldShowSearchResults = searchValue !== "";
   const debouncedValue = useDebounce(searchValue, 500);
   const { data: searchedPosts, isFetching: isSearchFetching } = useSearchSavedPosts(debouncedValue, user.id);
-
-  console.log("🔍 Saved: searchValue =", searchValue);
-  console.log("🔍 Saved: debouncedValue =", debouncedValue);
-  console.log("🔍 Saved: searchedPosts =", searchedPosts);
-  console.log("🔍 Saved: isSearchFetching =", isSearchFetching);
-
-  // debug the fetched pages so we know what's coming back
-  console.log("🔍 Saved: savedPosts =", savedPosts);
   
   useEffect(() => {
     if(inView && !searchValue) fetchNextPage();

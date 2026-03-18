@@ -158,14 +158,6 @@ export async function uploadFile(file: File) {
 }
 export async function getFilePreview(fileId: string) {
     try {
-        /** const fileUrl = storage.getFilePreview(
-            appwriteConfig.storageId,
-            fileId,
-            2000,
-            2000,
-            ImageGravity.Top,
-            100,
-        ) **/
        const fileUrl = storage.getFileView(
             appwriteConfig.storageId,
             fileId
@@ -191,7 +183,6 @@ export async function getRecentPosts(){
         [
             Query.orderDesc("$createdAt"),
             Query.limit(20),
-        // ВАЖНО: '*' берет поля поста, 'likes.*' подтягивает данные юзеров
             Query.select([
                     '*',          
                     'likes.*',    
@@ -202,7 +193,7 @@ export async function getRecentPosts(){
 
         return posts;
   } catch (error) {
-    console.log("Ошибка запроса с селектом:", error);
+    console.log(error);
   }
 }
 
@@ -361,7 +352,6 @@ export async function searchPosts(searchTerm: string) {
 }
 export async function searchUsers(searchTerm: string) {
     try {
-        console.log("🔍 searchUsers API: START - called with searchTerm =", searchTerm);
         
         const users = await databases.listDocuments(
             appwriteConfig.databaseId,
@@ -369,20 +359,13 @@ export async function searchUsers(searchTerm: string) {
             [Query.search("name", searchTerm)]
         )
         
-        console.log("🔍 searchUsers API: listDocuments result =", users);
-        console.log("🔍 searchUsers API: users.documents =", users?.documents);
-        console.log("🔍 searchUsers API: users.total =", users?.total);
         
         if (!users) {
-            console.error("❌ searchUsers API: users is null/undefined");
             throw Error('Could not fetch users');
         }
         
-        console.log("🔍 searchUsers API: SUCCESS - returning", users);
         return users;
     } catch (error) {
-        console.error("❌ searchUsers API: ERROR =", error);
-        console.error("❌ searchUsers API: returning empty object");
         return { documents: [], total: 0 };
     }
 }
@@ -406,28 +389,19 @@ export async function getInfiniteUsers({ pageParam }: { pageParam: string | null
 
 export async function searchSavedPosts(searchTerm: string, userId: string) {
     try {
-        console.log("🔍 searchSavedPosts API: START - called with searchTerm =", searchTerm);
-        
+
         const savedPosts = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.postTableId,
             [Query.select(["*", "creator.*", "save.*", "likes.*"]), Query.search("caption", searchTerm), Query.equal("save.user", userId)]
         )
-
-        console.log("🔍 searchSavedPosts API: listDocuments result =", savedPosts);
-        console.log("🔍 searchSavedPosts API: savedPosts.documents =", savedPosts?.documents);
-        console.log("🔍 searchSavedPosts API: savedPosts.total =", savedPosts?.total);
         
         if (!savedPosts) {
-            console.error("❌ searchSavedPosts API: savedPosts is null/undefined");
             throw Error('Could not fetch users');
         }
         
-        console.log("🔍 searchSavedPosts API: SUCCESS - returning", savedPosts);
         return savedPosts;
     } catch (error) {
-        console.error("❌ searchSavedPosts API: ERROR =", error);
-        console.error("❌ searchSavedPosts API: returning empty object");
         return { documents: [], total: 0 };
     }
 }
@@ -442,7 +416,6 @@ export async function getInfiniteSavedPosts({ pageParam, userId }: { pageParam: 
             appwriteConfig.savesTableId,
             queries
         )
-        console.log("🔍 getInfiniteSavedPosts: fetched", savedPosts);
         if (!savedPosts) throw Error('Could not fetch users');
         return savedPosts;
     } catch (error) {
@@ -520,8 +493,6 @@ export async function getUserById(userId: string) {
 }
 export async function getInfiniteLikedPosts({ pageParam, userId }: { pageParam: string | null,  userId: string}) {
     const queries: any[] = [ Query.orderDesc("$createdAt"), Query.limit(20), Query.select(["*", "creator.*", "likes.*" ]), Query.equal("likes.$id", userId)];
-    console.log("userId", userId);
-    console.log("queries", queries)
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
     }
@@ -531,7 +502,6 @@ export async function getInfiniteLikedPosts({ pageParam, userId }: { pageParam: 
             appwriteConfig.postTableId,
             queries
         )
-        console.log("🔍 getInfiniteLikedPosts: fetched", likedPosts);
         if (!likedPosts) throw Error('Could not fetch users');
         return likedPosts;
     } catch (error) {
