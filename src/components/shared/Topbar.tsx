@@ -18,9 +18,9 @@ useEffect(() => {
         <div className="flex justify-between items-center py-4 px-5">
             <Link to="/" className="flex gap-3 items-center">
                 <img 
-                    src="/assets/images/logo.svg"
+                    src="/assets/images/logo-text.png"
                     alt="Logo"
-                    width={130}
+                    width={100}
                     height={325}
                 />
             </Link>
