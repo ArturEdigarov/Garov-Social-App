@@ -1,5 +1,5 @@
-import { useGetPostById } from '@/lib/react-query/queriesAndMutations';
-import { Link, useParams } from 'react-router-dom';
+import { useDeletePost, useGetPostById } from '@/lib/react-query/queriesAndMutations';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Loader } from '@/components/shared/Loader';
 import { multiFormatDateString } from '@/lib/utils';
 import { useUserContext } from '@/context/AuthContext';
@@ -7,10 +7,15 @@ import { Button } from '@/components/ui/button';
 import PostStats from '@/components/shared/PostStats';
 
 const PostDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { data: post, isPending } = useGetPostById(id || "");
   const { user } = useUserContext();
-  const handleDeletePost = () => {}
+  const { mutate: deletePost } = useDeletePost();
+  const handleDeletePost = () => {
+    deletePost({ postId: id ?? "", imageId: post?.imageId });
+    navigate(-1);
+  }
 
   return (
     <div className='post_details-container'>

@@ -303,7 +303,7 @@ export async function updatePost(post: IUpdatePost) {
     }
 }
 export async function deletePost(postId: string, imageId: string) {
-    if(!postId || !imageId) throw Error('Post ID and Image ID are required for deletion');
+    if(!postId || !imageId || postId == "") throw Error('Post ID and Image ID are required for deletion');
 
     try {
         await databases.deleteDocument(
