@@ -480,10 +480,9 @@ export async function getUserById(userId: string) {
       appwriteConfig.userTableId,
       userId,
       [
-        Query.select(['*', 'save.*', 'posts.*']) 
+        Query.select(['*', 'save.*', 'posts.*', 'posts.likes.*']) 
       ]
     );
-
     if (!user) throw Error;
 
     return user;
