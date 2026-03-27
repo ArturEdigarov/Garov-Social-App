@@ -8,6 +8,7 @@ export const appwriteConfig = {
     savesTableId: import.meta.env.VITE_APPWRITE_SAVES_TABLE_ID,
     postTableId: import.meta.env.VITE_APPWRITE_POST_TABLE_ID,
     userTableId: import.meta.env.VITE_APPWRITE_USER_TABLE_ID,
+    followsTableId: import.meta.env.VITE_APPWRITE_FOLLOWS_TABLE_ID,
 }
 export const client = new Client();
 

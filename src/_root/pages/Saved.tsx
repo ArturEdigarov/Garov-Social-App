@@ -49,15 +49,7 @@ const saved = () => {
 
 
 
-      {/* <div className='flex flex-wrap gap-9 w-full max-w-5xl mt-10'>
-        {shouldShowSearchResults ? (
-          <SearchSavedPostsResults isSearchFetching={isSearchFetching} searchedPosts={searchedPosts}/>
-        ): shouldShowSavedPosts ? (
-          <p className='text-light-4 mt-10 text-center w-full'>End of posts</p>
-        ) : savedPosts.pages.map((item, index) => (
-          <GridPostList key={`page-${index}`} posts={posts} />
-        ))}
-      </div>  */
+      {
       <div className='flex flex-wrap gap-9 w-full max-w-5xl mt-10'>
         {shouldShowSearchResults ? (
           <SearchSavedPostsResults isSearchFetching={isSearchFetching} searchedPosts={searchedPosts}/>
@@ -65,7 +57,7 @@ const saved = () => {
           <p className='text-light-4 mt-10 text-center w-full'>End of posts</p>
         ) : (
           savedPosts.pages.map((item, index) => {
-            // ТРАНСФОРМАЦИЯ происходит ПРЯМО ЗДЕСЬ для каждой страницы
+
             const posts = item?.documents.map((saveDocument: any) => ({
               ...saveDocument.post,
               creator: saveDocument.post.creator,

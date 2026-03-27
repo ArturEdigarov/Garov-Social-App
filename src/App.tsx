@@ -5,6 +5,7 @@ import SignupForm from './_auth/forms/SignupForm';
 import AuthLayout from './_auth/AuthLayout';
 import RootLayout from './_root/RootLayout';
 import { Explore, Saved, CreatePost, Profile, UpdateProfile, EditPost, PostDetails, AllUsers, LikedPosts } from './_root/pages';
+
 const App = () => {
   return (
 <main className='flex h-screen'>

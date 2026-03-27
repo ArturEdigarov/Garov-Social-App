@@ -4,7 +4,7 @@ import {
     useQueryClient,
     useInfiniteQuery,
 } from "@tanstack/react-query"
-import { createUserAccount, signInAccount, SignOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost, getInfinitePosts, searchPosts, searchUsers, getInfiniteUsers, searchSavedPosts, getInfiniteSavedPosts, updateProfile, getUserById, getInfiniteLikedPosts } from "../appwrite/api";
+import { createUserAccount, signInAccount, SignOutAccount, createPost, getRecentPosts, likePost, savePost, deleteSavedPost, getCurrentUser, getPostById, updatePost, deletePost, getInfinitePosts, searchPosts, searchUsers, getInfiniteUsers, searchSavedPosts, getInfiniteSavedPosts, updateProfile, getUserById, getInfiniteLikedPosts, follow, getIsFollowing, unFollow} from "../appwrite/api";
 import type { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 
@@ -175,16 +175,16 @@ export const useSearchUsers = (searchTerm: string) => {
 export const useGetUsers = () => {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.GET_USERS],
-        // Явно забираем pageParam из объекта, который дает useInfiniteQuery
+        
         queryFn: ({ pageParam }) => getInfiniteUsers({ pageParam: pageParam as string | null }),
-        // В v5 начальный параметр ОБЯЗАТЕЛЕН
+        
         initialPageParam: null as string | null, 
         getNextPageParam: (lastPage: any) => {
-            // Если данных нет, возвращаем null, чтобы остановить загрузку
+            
             if (!lastPage || lastPage.documents.length === 0) {
                 return null;
             }
-            // Берем ID последнего документа для курсора
+           
             return lastPage.documents[lastPage.documents.length - 1].$id;
         }   
     })
@@ -207,16 +207,16 @@ export const useSearchSavedPosts = (searchTerm: string, userId: string) => {
 export const useGetSavedPosts = (userId: string) => {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.GET_SAVED_POSTS, userId],
-        // Явно забираем pageParam из объекта, который дает useInfiniteQuery
+        
         queryFn: ({ pageParam }) => getInfiniteSavedPosts({ pageParam: pageParam as string | null, userId }),
-        // В v5 начальный параметр ОБЯЗАТЕЛЕН
+        
         initialPageParam: null as string | null, 
         getNextPageParam: (lastPage: any) => {
-            // Если данных нет, возвращаем null, чтобы остановить загрузку
+            
             if (!lastPage || lastPage.documents.length === 0) {
                 return null;
             }
-            // Берем ID последнего документа для курсора
+            
             return lastPage.documents[lastPage.documents.length - 1].$id;
         }
     })
@@ -246,17 +246,69 @@ export const useGetUserById = (userId: string) => {
 export const useGetLikedPosts = (userId: string) => {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.GET_LIKED_POSTS, userId],
-        // Явно забираем pageParam из объекта, который дает useInfiniteQuery
+        
         queryFn: ({ pageParam }) => getInfiniteLikedPosts({ pageParam: pageParam as string | null, userId }),
-        // В v5 начальный параметр ОБЯЗАТЕЛЕН
+        
         initialPageParam: null as string | null, 
         getNextPageParam: (lastPage: any) => {
-            // Если данных нет, возвращаем null, чтобы остановить загрузку
+            
             if (!lastPage || lastPage.documents.length === 0) {
                 return null;
             }
-            // Берем ID последнего документа для курсора
+            
             return lastPage.documents[lastPage.documents.length - 1].$id;
         }
     })
 }
+
+export const useFollowUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ followerId, followingId }: { followerId: string, followingId: string }) => 
+        follow({ followerId, followingId }),
+    onSuccess: () => {
+      
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWERS], 
+      });
+      
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID],
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: [QUERY_KEYS.GET_FOLLOWING]
+     });
+    },
+  });
+};
+
+export const useGetIsFollowing = (currentUserId: string, userId : string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_FOLLOWING, currentUserId], 
+    queryFn: () => getIsFollowing(currentUserId, userId),
+    enabled: !!userId, 
+  });
+};
+
+export const useUnFollowUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ followerId, followingId }: { followerId: string, followingId: string }) => 
+        unFollow({ followerId, followingId }),
+    onSuccess: () => {
+      
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWERS], 
+      });
+      
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID],
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: [QUERY_KEYS.GET_FOLLOWING]
+     });
+    },
+  });
+};

@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Button } from '../ui/button';
+import FollowButton from './FollowButton';
 
 
 type GridUserListProps = {
@@ -32,7 +32,7 @@ const GridUserList = ({ users, showUser = true }: GridUserListProps) => {
                                     <p className='line-clamp-1'>{users.name}</p>
                                     <p className='line-clamp-1 text-light-4'>@{users.username}</p>
                                 </div>
-                                <Button size="lg" className='bg-primary-600'>Follow</Button>
+                                <FollowButton currentUserId={users.$id} />
                             </div>
                         )}
                     </div>

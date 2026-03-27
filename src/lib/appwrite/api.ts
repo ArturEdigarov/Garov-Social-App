@@ -480,7 +480,7 @@ export async function getUserById(userId: string) {
       appwriteConfig.userTableId,
       userId,
       [
-        Query.select(['*', 'save.*', 'posts.*', 'posts.likes.*']) 
+        Query.select(['*', 'save.*', 'posts.*', 'posts.likes.*', "followers.*", "following.*"]) 
       ]
     );
     if (!user) throw Error;
@@ -505,5 +505,88 @@ export async function getInfiniteLikedPosts({ pageParam, userId }: { pageParam: 
         return likedPosts;
     } catch (error) {
         console.log(error);
+    }
+}
+
+
+export async function follow({ followerId, followingId }: { followerId: string, followingId: string }) {
+    try {
+        const newFollow = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.followsTableId,
+            ID.unique(),
+            {
+                followerId: followerId,
+                followingId: followingId,
+            }
+        )
+        if (!newFollow) throw Error('Could not fetch newFollow');
+        return newFollow;
+    } catch (error) {
+        console.log(error);
+    }
+}
+export async function unFollow({ followerId, followingId }: { followerId: string, followingId: string }) {
+    try {
+        const unFollow = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.followsTableId,
+            [
+                Query.equal('followingId', followingId),
+                Query.equal('followerId', followerId), 
+            ]
+        )
+        if (unFollow.documents.length === 0) throw Error('No follow relationship found');
+
+        const followId = unFollow.documents[0].$id;
+
+        const deleteFollow = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.followsTableId,
+            followId,
+        )    
+
+        return deleteFollow;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+// export async function getIsFollowing( currentUserId: string, userId: string ) {
+//     try {
+//         const isFollowing = await databases.listDocuments(
+//             appwriteConfig.databaseId,
+//             appwriteConfig.userTableId,
+//             [
+//                 Query.equal('$id', currentUserId),
+//                 Query.select(["*", "followers.*"]),
+//                 Query.equal('followers.followerId', userId), 
+//                 Query.orderDesc("$createdAt"),
+//                 Query.limit(20),       
+//             ]
+//         )
+        
+//         if (!isFollowing) throw Error('Could not fetch isFollowing');
+//         return isFollowing;
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+export async function getIsFollowing(targetUserId: string, currentUserId: string) {
+    try {
+        const isFollowing = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.followsTableId, // <-- Идем в таблицу связей
+            [
+                Query.equal('followingId', targetUserId), // На кого подписаны
+                Query.equal('followerId', currentUserId),  // Кто подписан (ты)
+            ]
+        )
+        
+        return isFollowing; // Вернет массив с 1 документом, если связь есть, или 0, если нет
+    } catch (error) {
+        console.log(error);
+        return { documents: [], total: 0 }; // Возвращаем пустую структуру при ошибке
     }
 }

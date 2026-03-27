@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LikedPosts } from "@/_root/pages";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetUserById} from "@/lib/react-query/queriesAndMutations";
+import { useFollowUser, useGetIsFollowing, useGetUserById, useUnFollowUser} from "@/lib/react-query/queriesAndMutations";
 import { Loader } from "@/components/shared/Loader";
 import GridPostList from "@/components/shared/GridPostList";
 
@@ -30,16 +30,32 @@ const Profile = () => {
   const { id } = useParams();
   const { user } = useUserContext();
   const { pathname } = useLocation();
-
-  const { data: currentUser } = useGetUserById(id || "");;
-  console.log("Profile currentUser:", currentUser);
+ 
+  const { data: currentUser } = useGetUserById(id || "");
+  const { data: isFollowing } = useGetIsFollowing(id || "", user.id);
+  const { mutate: followUser, isPending: isFollowingLoading } = useFollowUser();
+  const { mutate: unFollowUser, isPending: isUnfollowingLoading} = useUnFollowUser();
+  const isActionLoading = isFollowingLoading || isUnfollowingLoading;
   if (!currentUser)
     return (
       <div className="flex-center w-full h-full">
         <Loader />
       </div>
     );
+  const isFollowingTest = isFollowing?.documents ? isFollowing.documents.length > 0 : false;
 
+  const handleFollow = (e: React.MouseEvent) => {
+  e.stopPropagation(); 
+  if(isActionLoading) return; 
+  if(isFollowingTest){
+    unFollowUser({ followerId: user.id, followingId: currentUser.$id });
+  } else{
+    followUser({ 
+      followerId: user.id, // Твой ID из AuthContext
+      followingId: currentUser.$id        // ID того, на чьей ты странице
+    });
+  }
+  };
   return (
     <div className="profile-container">
       <div className="profile-inner_container">
@@ -66,8 +82,8 @@ const Profile = () => {
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
               <StatBlock value={currentUser?.posts?.length || "0"} label="Posts" />
-              <StatBlock value={4} label="Followers" />
-              <StatBlock value={0} label="Following" />
+              <StatBlock value={currentUser?.followers?.length || 0} label="Followers" />
+              <StatBlock value={currentUser?.following?.length || 0} label="Following" />
             </div>
 
             <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">
@@ -94,8 +110,10 @@ const Profile = () => {
               </Link>
             </div>
             <div className={`${user.id === id && "hidden"}`}>
-              <Button type="button" className="shad-button_primary px-8">
-                Follow
+              <Button type="button" className={` ${isFollowingTest ? "shad-button_dark_4" : "shad-button_primary px-8"}`}
+                  onClick={handleFollow}
+                  disabled={isActionLoading}>
+                  {isActionLoading ? <Loader /> : (isFollowingTest ? "Unfollow" : "Follow")}
               </Button>
             </div>
           </div>

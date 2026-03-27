@@ -12,7 +12,7 @@ const allUsers = () => {
   const { ref, inView } = useInView();
 
   const { data: users, fetchNextPage, hasNextPage } = useGetUsers();
-
+  console.log("AllUsers users:", users);
   const [searchValue, setSearchValue] = useState("");
   const shouldShowSearchResults = searchValue !== "";
   const debouncedValue = useDebounce(searchValue, 500);
