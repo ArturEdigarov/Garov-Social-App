@@ -21,6 +21,9 @@ export const QUERY_KEYS = {
   SEARCH_POSTS: "getSearchPosts",
   SEARCH_USERS: "searchUsers",
   SEARCH_SAVED_POSTS: "searchSavedPosts",
+
+  GET_FOLLOWERS: "getFollowers",
+  GET_FOLLOWING: "getFollowing",
 } as const;
 
 export type QUERY_KEYS = typeof QUERY_KEYS[keyof typeof QUERY_KEYS];
